@@ -1,5 +1,48 @@
 'use strict';
 
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Handle filter button clicks
+  const filterButtons = document.querySelectorAll('[data-filter-btn]');
+  const filterItems = document.querySelectorAll('[data-filter-item]');
+  const selectValue = document.querySelector('[data-select-value]');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.textContent;
+      filterItems.forEach(item => {
+        if (filter === 'All' || item.getAttribute('data-category') === filter) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      // Update the select value to reflect the filter choice
+      if (selectValue) {
+        selectValue.textContent = filter;
+      }
+    });
+  });
+
+  // Handle select box clicks
+  const selectItems = document.querySelectorAll('[data-select-item]');
+
+  selectItems.forEach(selectItem => {
+    selectItem.addEventListener('click', () => {
+      const selectedCategory = selectItem.textContent;
+      selectValue.textContent = selectedCategory;
+
+      // Trigger the filter button click event programmatically
+      filterButtons.forEach(button => {
+        if (button.textContent === selectedCategory) {
+          button.click();
+        }
+      });
+    });
+  });
+
+});
 
 
 // element toggle function
