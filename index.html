@@ -680,31 +680,31 @@
           <ul class="filter-list">
 
             <li class="filter-item">
-              <button class="active" data-filter-btn>All</button>
+              <button class="active" data-filter="all" data-filter-btn>All</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Gotboost</button>
+              <button data-filter="Gotboost" data-filter-btn>Gotboost</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>UI/UX Designing</button>
+              <button data-filter="UI/UX Designing" data-filter-btn>UI/UX Designing</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>T-shirt Designing</button>
+              <button data-filter="T-shirt Designing" data-filter-btn>T-shirt Designing</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Graphic Designing</button>
+              <button data-filter="Graphic Designing" data-filter-btn>Graphic Designing</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Flipkart Play</button>
+              <button data-filter="Flipkart Play" data-filter-btn>Flipkart Play</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Zuchiz</button>
+              <button data-filter="Zuchiz" data-filter-btn>Zuchiz</button>
             </li>
 
       
@@ -725,31 +725,31 @@
             <ul class="select-list">
 
               <li class="select-item">
-                <button data-select-item>All</button>
+                <button data-filter="All" data-select-item>All</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>Gotboost</button>
+                <button data-filter="Gotboost" data-select-item>Gotboost</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>UI/UX Designing</button>
+                <button data-filter="UI/UX Designing" data-select-item>UI/UX Designing</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>T-shirt Designing</button>
+                <button data-filter="T-shirt Designing" data-select-item>T-shirt Designing</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>Graphic Designing</button>
+                <button data-filter="Graphic Designing" data-select-item>Graphic Designing</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>Flipkart Play</button>
+                <button data-filter="Flipkart Play" data-select-item>Flipkart Play</button>
               </li>
 
                <li class="select-item">
-                <button data-select-item>Zuchiz</button>
+                <button data-filter="Zuchiz" data-select-item>Zuchiz</button>
               </li>
 
             </ul>
@@ -758,7 +758,7 @@
 
        
           <ul class="project-list"> 
-            <li class="project-item active" data-filter-item data-category="Flipkart Play">
+            <li class="project-item active" data-filter-item data-category="Flipkart Play" >
               <a href="https://drive.google.com/file/d/19DclFhU70Adv7-cnRo5tS3tOuw8m8x6T/view?usp=sharing" target="_blank">
                 <figure class="project-img">
                 <img src="./assets/images/1.svg" alt="finance" loading="lazy">
@@ -1055,7 +1055,24 @@
   <!--
     - custom js link
   -->
-  <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/script.js">
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const filterValue = button.getAttribute('data-filter');
+
+        portfolioItems.forEach(item => {
+            if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                item.style.display = 'block'; // Show matching items
+            } else {
+                item.style.display = 'none';  // Hide others
+            }
+        });
+    });
+});
+  </script>
 
   <!--
     - ionicon link
