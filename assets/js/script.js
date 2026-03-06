@@ -2,6 +2,27 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  // Age Gate Functionality
+  const ageGateOverlay = document.getElementById('age-gate-overlay');
+  const ageYesBtn = document.getElementById('age-yes');
+  const ageNoBtn = document.getElementById('age-no');
+
+  if (ageGateOverlay && ageYesBtn && ageNoBtn) {
+  // Show age gate on every page load
+  ageGateOverlay.classList.remove('hidden');
+
+  // Handle Yes button
+  ageYesBtn.addEventListener('click', function() {
+    ageGateOverlay.classList.add('hidden');
+  });
+
+  // Handle No button
+  ageNoBtn.addEventListener('click', function() {
+    // Redirect to a different page or show a message
+    window.location.href = 'https://www.google.com'; // Or any other action
+  });
+}
+
   // Handle filter button clicks
   const filterButtons = document.querySelectorAll('[data-filter-btn]');
   const filterItems = document.querySelectorAll('[data-filter-item]');
@@ -127,7 +148,7 @@ const filterFunc = function (selectedValue) {
 
     if (selectedValue === "all") {
       filterItems[i].classList.add("active");
-    } else if (selectedValue === filterItems[i].dataset.category.toLowerCase()) {
+    } else if (selectedValue === filterItems[i].dataset.category) {
       filterItems[i].classList.add("active");
     } else {
       filterItems[i].classList.remove("active");
@@ -204,22 +225,93 @@ scrollToTopBtn.addEventListener('click', () => {
   });
 });
 
-// Floating Action Button - Quick Contact
+// Floating Action Button - Quick Contact Modal
 const fab = document.getElementById('fab');
+const contactModal = document.getElementById('contact-modal');
+const modalClose = document.getElementById('modal-close');
+const quickContactForm = document.getElementById('quick-contact-form');
+const modalSuccess = document.getElementById('modal-success');
 
+// Open modal when FAB is clicked
 fab.addEventListener('click', () => {
-  // Scroll to contact section
-  const contactSection = document.querySelector('[data-page="contact"]');
-  const navbarLink = document.querySelector('[data-nav-link]:nth-child(4)');
+  contactModal.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+});
 
-  // Trigger contact navigation
-  navbarLink.click();
+// Close modal when X button is clicked
+modalClose.addEventListener('click', () => {
+  contactModal.classList.remove('active');
+  document.body.style.overflow = '';
+  // Reset form after closing
+  setTimeout(() => {
+    quickContactForm.reset();
+    quickContactForm.classList.remove('active');
+    modalSuccess.classList.remove('active');
+  }, 300);
+});
 
-  // Smooth scroll to contact section
-  contactSection.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-  });
+// Close modal when clicking outside
+contactModal.addEventListener('click', (e) => {
+  if (e.target === contactModal) {
+    contactModal.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      quickContactForm.reset();
+      quickContactForm.classList.remove('active');
+      modalSuccess.classList.remove('active');
+    }, 300);
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && contactModal.classList.contains('active')) {
+    contactModal.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      quickContactForm.reset();
+      quickContactForm.classList.remove('active');
+      modalSuccess.classList.remove('active');
+    }, 300);
+  }
+});
+
+// Handle quick contact form submission
+quickContactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const submitBtn = quickContactForm.querySelector('.modal-submit-btn');
+  const originalBtnText = submitBtn.innerHTML;
+  
+  // Show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<ion-icon name="hourglass"></ion-icon><span>Sending...</span>';
+  
+  try {
+    const formData = new FormData(quickContactForm);
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Show success message
+      quickContactForm.classList.add('active');
+      modalSuccess.classList.add('active');
+    } else {
+      // Show error
+      alert('Something went wrong. Please try again or use the contact form below.');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Something went wrong. Please try again or use the contact form below.');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  }
 });
 
 // Particle Background Animation
