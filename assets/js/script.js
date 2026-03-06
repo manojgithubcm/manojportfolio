@@ -453,3 +453,4 @@ window.addEventListener('load', () => {
   const initialElements = document.querySelectorAll('.sidebar, .navbar, article.active');
   initialElements.forEach(el => el.classList.add('loading'));
 });
+
